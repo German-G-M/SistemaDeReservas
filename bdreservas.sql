@@ -13,7 +13,7 @@ Orden de la creación de las tablas
 - persona (listo)
 - agencia (listo)
 - puerto (listo)
-- habitacion
+- habitacion (listo)
 (luego los que tienen foreign keys)
 - usuario
 - agencia_persona
@@ -26,7 +26,7 @@ Orden de la creación de las tablas
   
 create table rol (
   id int primary key,
-  descripcion varchar (50)
+  descripcion varchar (50) not null
 )
 /*
   roles:
@@ -44,9 +44,9 @@ create table rol (
 create table persona (
   id serial primary key,
   ci varchar(12),
-  nombre varchar(50),
+  nombre varchar(50) not null,
   nombre2 varchar(50),
-  apellido1 varchar(50),
+  apellido1 varchar(50) not null,
   apellido2 varchar(50),
   telefono1 varchar(15),
   telefono2 varchar(15),
@@ -57,7 +57,7 @@ create table persona (
   
 create table agencia (
   id serial primary key,
-  nombre varchar (50),
+  nombre varchar (50) not null,
   telefono varchar (15),
   direccion varchar (50),
   observacion varchar (200)
@@ -73,8 +73,8 @@ tipo agencia:
 
 create table puerto (
   id serial primary key,
-  codigo varchar (5),
-  descripcion varchar (50)
+  codigo varchar (5) not null,
+  descripcion varchar not null(50)
 )
 
 /*
@@ -86,3 +86,32 @@ ISC (Isla del sol centro-Challa)
 ILN (Isla de la luna)
 ISSK (Hotel Puma Punku)
 */
+
+create table habitacion (
+  id serial primary key,
+  nombre_numero varchar(20) not null,
+  tipo float,
+  cantidad_camas int,
+  incluye varchar(50),
+  estado_activo bit,
+  estado_limpieza bit,
+  observaciones varchar(50)
+)
+/*
+tipo habitacion:
+1 -> simple
+2.1 -> matrimonial
+2.2 ->doble
+3 -> triple
+4 ->cuadruple
+5 ->quintuple
+6 ->sextuple
+7 ->septuple
+*/
+
+--TABLAS CON LLAVES FORANEAS
+
+create table usuario (
+  
+)
+
