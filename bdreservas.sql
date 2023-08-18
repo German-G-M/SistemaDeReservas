@@ -18,10 +18,10 @@ Orden de la creación de las tablas
 - usuario (listo)
 - agencia_persona (listo)
 - grupo (listo)
-- viajero
-- hospedaje
-- viajelancha
-- alimentacion
+- viajero (listo)
+- hospedaje (listo)
+- alimentacion (listo)
+- viajelancha (listo)
 */
   
 create table rol (
@@ -164,6 +164,7 @@ create table grupo (
   registrado_por varchar (50),
   responsable_grupo varchar (20),
   observaciones varchar (200),
+  estado varchar (10),
   foreign key (agencia_id) references agencia (id)
 )
 /*
@@ -189,5 +190,117 @@ En 'reservado_por' irá el código del usuario (que esté realizando el uso de l
 En 'agencia' ira el código de la agencia responsable si existe ()
 En 'registrado_por' irá el código del usuario (que esté realizando el uso de la WebApp). ejem: R1,R2,R3
 En 'responsable_grupo', al principio estará vacío. cuando llegue el grupo se lo podrá seleccionar desde "viajero"
+
+==========================================
+  estadoGrupo: es igual a los estados de hospedaje
 */
 
+create table viajero (
+  id serial primary key,
+  dni varchar (20),
+  nombre varchar (50),
+  nombre2 varchar (50),
+  apellido1 varchar (50),
+  apellido2 varchar (50),
+  nacionalidad varchar (50),
+  tipo varchar (20),
+  grupo varchar (20),
+  foreign key (grupo) references grupo (codigo)
+)
+/*
+tipoViajero:
+Turista
+Guia
+Asistente
+*/
+
+create table hospedaje (
+  id serial primary key,
+  fecha_in date,
+  recibido_por varchar (5),
+  fecha_out date,
+  despachado_por varchar (5) ,
+  estado varchar (10),
+  costo_por_persona int,
+  costo_por_habitacion int,
+  esta_pagado bit,
+  fecha_reserva timestamp not null,
+  observaciones varchar (200),
+  viajero int,
+  grupo int not null,
+  habitacion int,
+  foreign key (viajero) references viajero (id),
+  foreign key (grupo) references grupo (id),
+  foreign key (habitacion) references habitacion (id)
+)
+/*
+estadoHospedaje:
+RA-->Reserva activa
+SM-->Solicitud modificada
+SC-->Solicitud cancelada
+VR-->Viajero recibido
+VD-->Viajero despachado
+NS-->No-show
+VS-->Viajero servido
+
+===========================
+recibido_por, sera el codigo del usuario que registro la entrada (chekin)
+despachado_por, sera el codigo del usuario que registro la salida (chekout)
+*/
+
+create table alimentacion (
+  id serial primary key,
+  fecha_consumo date,
+  producto varchar (100),
+  cantidad int,
+  precio_unitario int,
+  precio_total int,
+  es_reserva bit,
+  estado varchar (10),
+  esta_pagado bit,
+  observaciones varchar(200),
+  fecha_reserva date,
+  viajero int,
+  grupo int not null,
+  habitacion int,
+  foreign key (viajero) references viajero (id),
+  foreign key (grupo) references grupo (id),
+  foreign key (habitacion) references habitacion (id)
+)
+
+/*
+estadoAlimentacion: es igual a los estados de hospedaje
+*/
+
+create table viajelancha (
+  id serial primary key,
+  fecha_viaje date,
+  puerto_salida varchar (5),
+  hora_salida string (10),
+  puerto_llegada varchar (5),
+  tiempo_viaje varchar (5),
+  hora_llegada string (10),
+  precio_pasajero int,
+  precio_grupo int,
+  cantidad_turistas int,
+  cantidad_guias int,
+  es_reserva bit,
+  fecha_reserva timestamp,
+  esta_pagado bit,
+  estado varchar (10),
+  tipo_viaje varchar (15),
+  observaciones varchar (200),
+  viajero int,
+  grupo int not null,
+  foreign key (viajero) references viajero (id),
+  foreign key (grupo) references grupo (id)
+)
+/*
+Hora_salida: 123456789101112 00,15,30,45 am,pm
+tiempo_viaje:0:30,1:00,1:30, 2:00, 2:30, 3:00, 3:30 (horas aprox)
+estadoViajelancha: es igual a los estados de hospedaje
+
+tipoViajelancha:
+Privado
+Compartido
+*/
