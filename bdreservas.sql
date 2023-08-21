@@ -27,7 +27,7 @@ Orden de la creación de las tablas
 create table rol (
   id int primary key,
   descripcion varchar (50) not null
-)
+);
 /*
   roles:
 1) SuperAdministrador
@@ -53,7 +53,7 @@ create table persona (
   correo varchar(50),
   direccion varchar(50),
   observaciones(200)
-)
+);
   
 create table agencia (
   id serial primary key,
@@ -62,7 +62,7 @@ create table agencia (
   telefono varchar (15),
   direccion varchar (50),
   observacion varchar (200)
-)
+);
 
 /*
 tipo agencia:
@@ -76,7 +76,7 @@ create table puerto (
   id serial primary key,
   codigo varchar (5) not null,
   descripcion varchar not null(50)
-)
+);
 
 /*
 código puerto:
@@ -85,7 +85,8 @@ ISS (Isla del sol sur- Yumani)
 ISN (Isla del sol norte-Challapata)
 ISC (Isla del sol centro-Challa)
 ILN (Isla de la luna)
-ISSK (Hotel Puma Punku)
+ISK (Hotel Puma Punku)
+CPY (Yampupata)
 */
 
 create table habitacion (
@@ -97,7 +98,7 @@ create table habitacion (
   estado_activo bit,
   estado_limpieza bit,
   observaciones varchar(50)
-)
+);
 /*
 tipo habitacion:
 1 -> simple
@@ -119,12 +120,12 @@ create table usuario (
   id varchar (5) primary key,
   usuario varchar (50) not null,
   password varchar (50) not null,
-  estado varchar (15),
+  estado bit,
   persona_id int not null,
   rol_id int not null,
   foreign key (persona_id) references persona (id),
   foreign key (rol_id) references rol (id)
-)
+);
 /*
 el ID de usuario será de acuerdo al Rol: 
 1) SuperAdministrador ---> SA1,SA2,SA3, ...
@@ -138,7 +139,9 @@ el ID de usuario será de acuerdo al Rol:
 9) Guia ---->G1,G2,G3
 
 
-estadoUsuario: activo/inactivo/eliminado
+estadoUsuario: 
+1 --> activo
+0 --> inactivo
 */
 
 create table agencia_persona (
@@ -147,7 +150,7 @@ create table agencia_persona (
   primary key (agencia_id,persona_id),
   foreign key (agencia_id) references agencia (id),
   foreign key (persona_id) references persona (id)
-)
+);
 --La tabla agencia_persona tendrá una llave compuesta
 
 create table grupo (
@@ -166,7 +169,7 @@ create table grupo (
   observaciones varchar (200),
   estado varchar (10),
   foreign key (agencia_id) references agencia (id)
-)
+);
 /*
 tipoGrupo:
 RSV----->Reserva
@@ -206,7 +209,7 @@ create table viajero (
   tipo varchar (20),
   grupo varchar (20),
   foreign key (grupo) references grupo (codigo)
-)
+);
 /*
 tipoViajero:
 Turista
@@ -232,7 +235,7 @@ create table hospedaje (
   foreign key (viajero) references viajero (id),
   foreign key (grupo) references grupo (id),
   foreign key (habitacion) references habitacion (id)
-)
+);
 /*
 estadoHospedaje:
 RA-->Reserva activa
@@ -266,7 +269,7 @@ create table alimentacion (
   foreign key (viajero) references viajero (id),
   foreign key (grupo) references grupo (id),
   foreign key (habitacion) references habitacion (id)
-)
+);
 
 /*
 estadoAlimentacion: es igual a los estados de hospedaje
@@ -294,7 +297,7 @@ create table viajelancha (
   grupo int not null,
   foreign key (viajero) references viajero (id),
   foreign key (grupo) references grupo (id)
-)
+);
 /*
 Hora_salida: 123456789101112 00,15,30,45 am,pm
 tiempo_viaje:0:30,1:00,1:30, 2:00, 2:30, 3:00, 3:30 (horas aprox)
@@ -304,3 +307,126 @@ tipoViajelancha:
 Privado
 Compartido
 */
+
+
+--LLENADO DE DATOS (INSERCIONES)
+
+insert into rol (id,descripcion) values (1,'SuperAdministrador');
+insert into rol (id,descripcion) values (2,'Administrador');
+insert into rol (id,descripcion) values (3,'Segundo Administrador');
+insert into rol (id,descripcion) values (4,'Recepcionista');
+insert into rol (id,descripcion) values (5,'Personal de Alimentos');
+insert into rol (id,descripcion) values (6,'Personal de Limpieza');
+insert into rol (id,descripcion) values (7,'Personal de Mantenimiento');
+insert into rol (id,descripcion) values (8,'Responsable de la reserva');
+insert into rol (id,descripcion) values (9,'Guia');
+insert into rol (id,descripcion) values (10,'Acompañante');
+
+
+insert into persona (ci,nombre,nombre2,appellido1,apellido2,telefono1,telefono2,correo,direccion,observaciones)
+  values ('6072590','German','','Gutierrez','','76543210','','','','');
+insert into persona (ci,nombre,nombre2,appellido1,apellido2,telefono1,telefono2,correo,direccion,observaciones)
+  values ('88888','Carlos','','Conrado','','65432107','','','','');
+insert into persona (ci,nombre,nombre2,appellido1,apellido2,telefono1,telefono2,correo,direccion,observaciones)
+  values ('55555','Clark','','Kent','','6541230','','','','');
+insert into persona (ci,nombre,nombre2,appellido1,apellido2,telefono1,telefono2,correo,direccion,observaciones)
+  values ('4444444','Bruno','','Diaz','','123456789','','','','');
+
+
+insert into agencia (nombre,tipo,telefono,direccion,observacion) values ('travel tour','Operadora','6543217','sagarnaga 1023', '');
+insert into agencia (nombre,tipo,telefono,direccion,observacion) values ('Trans tour','Operadora','78549612','copacabana 210', '');
+insert into agencia (nombre,tipo,telefono,direccion,observacion) values ('Viajes del sol','Agencia','6543217','sucre 256', '');
+insert into agencia (nombre,tipo,telefono,direccion,observacion) values ('Particular','Particular','6543217','', 'sin agencia');
+insert into agencia (nombre,tipo,telefono,direccion,observacion) values ('Otro','Otro','6543217','', 'sin agencia');
+
+
+insert into puerto (codigo,descripcion) values ('CPC','Copacabana');
+insert into puerto (codigo,descripcion) values ('ISS','Yumani - Isla del sol Sur');
+insert into puerto (codigo,descripcion) values ('ISN','Challapata - Isla del sol Norte');
+insert into puerto (codigo,descripcion) values ('ISC','Challa - Isla del sol Centro');
+insert into puerto (codigo,descripcion) values ('ILN','Isla de la Luna');
+insert into puerto (codigo,descripcion) values ('ISK','Hotel Puma Punku');
+insert into puerto (codigo,descripcion) values ('CPY','Yampupata');
+
+
+create table habitacion (
+  id serial primary key,
+  nombre_numero varchar(20) not null,
+  tipo float,
+  cantidad_camas int,
+  incluye varchar(50),
+  estado_activo bit,
+  estado_limpieza bit,
+  observaciones varchar(50)
+);
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('101',1,1,'',B'1',B'1','');
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('102',1,1,'',B'1',B'1','');
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('103',2.1,1,'',B'1',B'1','');
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('104',2.1,1,'',B'1',B'1','');
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('201',2.2,2,'',B'1',B'1','');
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('202',2.2,2,'',B'1',B'1','');
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('203',2.2,2,'',B'1',B'1','');
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('301',3.3,3,'',B'1',B'1','');
+insert into habitacion (nombre_numero,tipo, cantidad_camas,incluye,estado_activo,estado_limpieza,observaciones)
+  values ('302',3.3,3,'',B'1',B'1','');
+
+
+--Revisar inserción
+insert into usuario (id,usuario,password,estado,persona_id,rol_id)
+  values ('A1','usuario','password',B'1',1,1);
+insert into usuario (id,usuario,password,estado,persona_id,rol_id)
+  values ('A2','usuario','password',B'1',1,1);
+insert into usuario (id,usuario,password,estado,persona_id,rol_id)
+  values ('A3','usuario','password',B'1',1,1);
+
+
+--Revisar inserción
+insert into agencia_persona (agencia_id,persona_id) values (1,1);
+insert into agencia_persona (agencia_id,persona_id) values (2,2);
+insert into agencia_persona (agencia_id,persona_id) values (3,3);
+
+
+
+
+--Revisar inserción
+insert into grupo (nombre,codigo,tipo,cantidad_turistas,cantidad_asistentes,cantidad_nacionales,cantidad_extranjeros,reservado_por,responsable_grupo, obsercaciones, estado)
+  values ('grupo1','g1','tipo',5,1,1,5,'reservado por','agencia_id','registrado_por','responsable1','observacion','igual a estado hospedaje');
+
+
+
+--Revisar inserción
+insert into viajero (dni,nombre,nombre2,apellido1,apellido2,nacionalidad,tipo,grupo)
+  values ('dni','nombre','nombre2','apellido1','apellido2','nacionalidad','tipo','grupo');
+
+
+
+create table hospedaje (
+  id serial primary key,
+  fecha_in date,
+  recibido_por varchar (5),
+  fecha_out date,
+  despachado_por varchar (5) ,
+  estado varchar (10),
+  costo_por_persona int,
+  costo_por_habitacion int,
+  esta_pagado bit,
+  fecha_reserva timestamp not null,
+  observaciones varchar (200),
+  viajero int,
+  grupo int not null,
+  habitacion int,
+  foreign key (viajero) references viajero (id),
+  foreign key (grupo) references grupo (id),
+  foreign key (habitacion) references habitacion (id)
+);
+--Revisar inserción
+insert into hospedaje (fecha_in,recibido_por,fecha_out,despachado_por,estado, costo_por_persona, costo_por_habitacion,esta_pagado,fecha_reserva,observaciones,viajero,grupo,habitacion)
+  values ('aa-mm-dd','R1','aa-mm-dd','R1','RA',150,0,B'1','aa-mm-dd','sin observaciones',1,1,1);
