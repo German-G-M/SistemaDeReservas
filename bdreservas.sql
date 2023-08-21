@@ -408,25 +408,20 @@ insert into viajero (dni,nombre,nombre2,apellido1,apellido2,nacionalidad,tipo,gr
 
 
 
-create table hospedaje (
-  id serial primary key,
-  fecha_in date,
-  recibido_por varchar (5),
-  fecha_out date,
-  despachado_por varchar (5) ,
-  estado varchar (10),
-  costo_por_persona int,
-  costo_por_habitacion int,
-  esta_pagado bit,
-  fecha_reserva timestamp not null,
-  observaciones varchar (200),
-  viajero int,
-  grupo int not null,
-  habitacion int,
-  foreign key (viajero) references viajero (id),
-  foreign key (grupo) references grupo (id),
-  foreign key (habitacion) references habitacion (id)
-);
 --Revisar inserción
 insert into hospedaje (fecha_in,recibido_por,fecha_out,despachado_por,estado, costo_por_persona, costo_por_habitacion,esta_pagado,fecha_reserva,observaciones,viajero,grupo,habitacion)
   values ('aa-mm-dd','R1','aa-mm-dd','R1','RA',150,0,B'1','aa-mm-dd','sin observaciones',1,1,1);
+
+
+
+--Revisar inserción
+insert into alimentacion (fecha_consumo,producto,cantidad,precio_unitario,precio_total,es_reserva,estado,esta_pagado,observaciones,fecha_reserva,viajero,grupo,habitacion)
+  values ('aa-mm-dd','producto1',2,0,0,B'1','estado',B'0','obs','aa-mm-dd',1,1,1);
+
+
+
+
+--Revisar inserción
+insert into viajelancha (fecha_viaje,puerto_salida,hora_salida,puertollegada,tiempo_viaje,hora_llegada,precio_pasajero,precio_grupo,cantidad_turistas,cantidad_guias,es_reserva,fecha_reserva,esta_pagado,estado,tipo_viaje,observaciones,viajero,grupo)
+  values ('aa-mm-dd','salida','08:30','llegada','2:30','11:30',0,0,0,0,B'1','aa-mm-dd',B'0','estado','tipo_viaje','observaciones',1,1);
+
